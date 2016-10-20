@@ -160,6 +160,8 @@ vim
 tcpdump
 qemu-utils
 ntfs-3g
+hdparm
+usbutils
 EOF
 
 mkdir -p config/preseed
