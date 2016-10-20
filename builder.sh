@@ -193,6 +193,11 @@ Change the keyboard layout with one of:
     sudo loadkeys pt-latin1
     sudo loadkeys us
 
+List disks:
+
+    lsblk -O
+    lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
+
 EOF
 
 mkdir -p config/includes.chroot/etc/profile.d
