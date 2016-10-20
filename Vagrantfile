@@ -23,4 +23,18 @@ Vagrant.configure('2') do |config|
         '--medium', 'live-image-amd64.hybrid.iso']
     end
   end
+
+  config.vm.define :targetefi do |config|
+    config.vm.box = 'empty'
+    config.vm.provider :virtualbox do |vb|
+      vb.customize ['modifyvm', :id, '--firmware', 'efi']
+      vb.customize ['storageattach', :id,
+        '--storagectl', 'IDE Controller',
+        '--device', '0',
+        '--port', '1',
+        '--type', 'dvddrive',
+        '--tempeject', 'on',
+        '--medium', 'live-image-amd64.hybrid.iso']
+    end
+  end
 end

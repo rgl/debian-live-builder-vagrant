@@ -8,6 +8,8 @@ Run `create_empty_box.sh` to create the `empty` environment (the target machine 
 
 Run `vagrant up target` to launch the `target` machine. Note that vagrant wont be able to connect to it; the ideia is just to use it to test the generated ISO.
 
+Run `vagrant up targetefi` to launch the `targetefi` machine. This one boots in [EFI mode](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface).
+
 
 # Burning the ISO file to a USB pen/disk drive
 
