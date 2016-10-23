@@ -243,6 +243,8 @@ EOF
 cat >config/hooks/normal/9990-bootloader-menu.hook.binary <<'EOF'
 #!/bin/sh
 set -eux
+sed -i -E 's,^(set default=.+),\1\nset timeout=5,' boot/grub/grub.cfg
+sed -i -E 's,^(timeout ).+,\150,' isolinux/isolinux.cfg
 cat >isolinux/menu.cfg <<'EOM'
 menu hshift 0
 menu width 82
