@@ -140,7 +140,7 @@ lb config noauto \
     --mode debian \
     --distribution stretch \
     --architectures amd64 \
-    --bootappend-live 'boot=live components' \
+    --bootappend-live 'boot=live components username=vagrant' \
     --mirror-bootstrap http://ftp.pt.debian.org/debian/ \
     --mirror-binary http://ftp.pt.debian.org/debian/ \
     --apt-indices false \
@@ -155,6 +155,7 @@ mkdir -p config/package-lists
 cat >config/package-lists/custom.list.chroot <<'EOF'
 console-data
 debconf-utils
+openssh-server
 less
 vim
 tcpdump
@@ -233,6 +234,26 @@ set nobackup
 EOF
 
 mkdir -p config/hooks/normal
+cat >config/hooks/normal/9990-vagrant-user.hook.chroot <<'EOF'
+#!/bin/sh
+set -eux
+
+# create the vagrant user and group.
+adduser --gecos '' --disabled-login vagrant
+echo vagrant:vagrant | chpasswd -m
+
+# let him use root permissions without sudo asking for a password.
+echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/vagrant
+
+# install the vagrant public key.
+# NB vagrant will replace this insecure key on the first vagrant up.
+install -d -m 700 /home/vagrant/.ssh
+cd /home/vagrant/.ssh
+wget -q --no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub -O authorized_keys
+chmod 600 authorized_keys
+chown -R vagrant:vagrant .
+EOF
+
 cat >config/hooks/normal/9990-bootloader-splash.hook.binary <<'EOF'
 #!/bin/sh
 set -eux
