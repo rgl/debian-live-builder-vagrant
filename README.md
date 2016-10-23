@@ -4,11 +4,11 @@ This is a [Vagrant](https://www.vagrantup.com/) Environment for creating custom 
 
 Run `vagrant up builder` to launch the debian live builder. This will build the ISO image and copy it to the current directory as `live-image-amd64.hybrid.iso`.
 
-Run `create_empty_box.sh` to create the `empty` environment (the target machine uses it as a base box).
+Run `create_empty_box.sh` to create the `empty` environment (the test machines use it as a base box).
 
-Run `vagrant up target` to launch the `target` machine. Note that vagrant wont be able to connect to it; the ideia is just to use it to test the generated ISO.
+Run `vagrant up bios` to boot the generated ISO in [BIOS](https://en.wikipedia.org/wiki/BIOS) mode.
 
-Run `vagrant up targetefi` to launch the `targetefi` machine. This one boots in [EFI mode](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface).
+Run `vagrant up efi` to boot the generated ISO in [EFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) mode.
 
 
 # Burning the ISO file to a USB pen/disk drive
