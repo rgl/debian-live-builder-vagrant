@@ -266,7 +266,7 @@ iso-info live-image-amd64.hybrid.iso --no-header
 cp live-image-amd64.hybrid.iso /vagrant
 
 # clean it.
-lb clean
+#lb clean
 #lb clean --purge
 
 # add it to local git repository.
