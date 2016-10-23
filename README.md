@@ -17,7 +17,7 @@ Use [Etcher](https://www.etcher.io/) to burn the generated `live-image-amd64.hyb
 
 ```bash
 sudo su -l # enter a root shell
-dd if=live-image-amd64.hybrid.iso of=/dev/sdd bs=128k
+cp live-image-amd64.hybrid.iso /dev/sdd
 sync
 echo 1 >/sys/block/sdd/device/rescan
 fdisk -u -l /dev/sdd
