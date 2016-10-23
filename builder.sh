@@ -266,11 +266,16 @@ cat >config/hooks/normal/9990-bootloader-menu.hook.binary <<'EOF'
 set -eux
 sed -i -E 's,^(set default=.+),\1\nset timeout=5,' boot/grub/grub.cfg
 sed -i -E 's,^(timeout ).+,\150,' isolinux/isolinux.cfg
+rm isolinux/advanced.cfg
 cat >isolinux/menu.cfg <<'EOM'
 menu hshift 0
 menu width 82
 include stdmenu.cfg
 include live.cfg
+menu separator
+label hdt
+	menu label ^Hardware Detection Tool (HDT)
+	com32 hdt.c32
 menu clear
 EOM
 EOF
