@@ -163,6 +163,7 @@ qemu-utils
 ntfs-3g
 hdparm
 usbutils
+eject
 EOF
 
 mkdir -p config/preseed
