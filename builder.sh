@@ -161,6 +161,8 @@ vim
 tcpdump
 qemu-utils
 ntfs-3g
+exfat-fuse
+exfat-utils
 hdparm
 usbutils
 eject
