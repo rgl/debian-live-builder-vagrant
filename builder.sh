@@ -194,14 +194,22 @@ Enter a root shell with:
 
 Change the keyboard layout with one of:
 
-    sudo loadkeys pt-latin1
-    sudo loadkeys us
+    loadkeys pt-latin1
+    loadkeys us
 
 List disks:
 
     lsblk -O
     lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
 
+HINT: Press the up/down arrow keys to navigate the history.
+EOF
+
+mkdir -p config/includes.chroot/root
+cat >config/includes.chroot/root/.bash_history <<'EOF'
+loadkeys us
+loadkeys pt-latin1
+lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
 EOF
 
 mkdir -p config/includes.chroot/etc/profile.d
@@ -254,6 +262,13 @@ install -d -m 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
 wget -q --no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub -O authorized_keys
 chmod 600 authorized_keys
+cd ..
+
+# populate the bash history. 
+cat >.bash_history <<'EOS'
+sudo su -l
+EOS
+
 chown -R vagrant:vagrant .
 EOF
 
