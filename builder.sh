@@ -254,6 +254,12 @@ chmod 600 authorized_keys
 chown -R vagrant:vagrant .
 EOF
 
+cat >config/hooks/normal/9990-initrd.hook.chroot <<'EOF'
+#!/bin/sh
+set -eux
+echo nls_ascii >>etc/initramfs-tools/modules # for booting from FAT32.
+EOF
+
 cat >config/hooks/normal/9990-bootloader-splash.hook.binary <<'EOF'
 #!/bin/sh
 set -eux
