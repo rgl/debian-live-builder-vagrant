@@ -67,33 +67,13 @@ EOF
 #
 # install dependencies.
 
-apt-get install -y dpkg-dev debhelper debootstrap debian-archive-keyring
 apt-get install -y libcdio-utils librsvg2-bin pngquant
 
 
 #
-# build and install the debian live-build package from source.
+# install debian live-build.
 
-su vagrant <<'VAGRANT'
-set -eux
-
-# enable wget quiet mode (to disable the process bar).
-echo 'quiet=on' >~/.wgetrc
-
-# clone the live-build repo.
-cd ~
-git clone git://anonscm.debian.org/git/debian-live/live-build.git
-cd live-build
-git checkout 6e0b98ce05c1a8e8dd140009cc60c7ea348b6fa1
-git rev-parse --abbrev-ref HEAD # branch
-git rev-parse HEAD              # revision
-
-# build the package.
-dpkg-buildpackage -b -uc -us
-VAGRANT
-
-# install the live-build package.
-dpkg -i /home/vagrant/live-build_*.deb
+apt-get install -y live-build
 
 
 #

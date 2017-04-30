@@ -1,19 +1,21 @@
 #!/bin/bash
-set -eux
+set -eu
 
 [ -d ~/.vagrant.d/boxes/empty ] && exit 0
+
+set -eux
 
 rm -rf tmp-empty-box 
 mkdir -p tmp-empty-box
 pushd tmp-empty-box
 
-TEMPLATE_BOX=~/.vagrant.d/boxes/ubuntu-16.04-amd64/0/virtualbox
+TEMPLATE_BOX=~/.vagrant.d/boxes/debian-9-amd64/0/virtualbox
 
 echo '{"provider":"virtualbox"}' >metadata.json
 VBoxManage createhd --filename empty.vmdk --format VMDK --size 10000
 sed -r \
-    -e 's,packer-amd64-virtualbox-.+?.vmdk,empty.vmdk,' \
-    -e 's,([">]packer-amd64-virtualbox-)[^"<]+?,\1empty,' \
+    -e 's,packer-debian-9-amd64-virtualbox-.+?.vmdk,empty.vmdk,' \
+    -e 's,([">]packer-debian-9-amd64-virtualbox-)[^"<]+?,\1empty,' \
     $TEMPLATE_BOX/box.ovf \
     >box.ovf
 cp $TEMPLATE_BOX/Vagrantfile .

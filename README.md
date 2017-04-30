@@ -2,9 +2,15 @@ This is a [Vagrant](https://www.vagrantup.com/) Environment for creating custom 
 
 # Usage
 
-Run `vagrant up builder` to launch the debian live builder. This will build the ISO image and copy it to the current directory as `live-image-amd64.hybrid.iso`.
+Install the [Base Debian Vagrant Box](https://github.com/rgl/debian-vagrant).
 
-Run `create_empty_box.sh` to create the `empty` environment (the test machines use it as a base box).
+Install the required Vagrant plugins:
+
+```bash
+vagrant plugin install vagrant-triggers # see https://github.com/emyl/vagrant-triggers
+```
+
+Run `vagrant up builder` to launch the debian live builder. This will build the ISO image and copy it to the current directory as `live-image-amd64.hybrid.iso`.
 
 Run `vagrant up bios` to boot the generated ISO in [BIOS](https://en.wikipedia.org/wiki/BIOS) mode.
 

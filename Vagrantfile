@@ -6,7 +6,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.define :builder do |config|
-    config.vm.box = 'ubuntu-16.04-amd64'
+    config.vm.box = 'debian-9-amd64'
     config.vm.hostname = 'builder'
     config.vm.provision :shell, path: 'builder.sh'
   end
@@ -28,5 +28,9 @@ Vagrant.configure('2') do |config|
           '--medium', 'live-image-amd64.hybrid.iso']
       end
     end
+  end
+
+  config.trigger.before :up, :vm => ['bios', 'efi'] do
+    run './create_empty_box.sh'
   end
 end
