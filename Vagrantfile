@@ -8,7 +8,7 @@ Vagrant.configure('2') do |config|
   config.vm.define :builder do |config|
     config.vm.box = 'debian-9-amd64'
     config.vm.hostname = 'builder'
-    config.vm.provision :shell, path: 'builder.sh'
+    config.vm.provision :shell, path: 'builder.sh', env: {'LB_BUILD_TYPE' => ENV['LB_BUILD_TYPE'] || 'iso'}
   end
 
   ['bios', 'efi'].each do |firmware|

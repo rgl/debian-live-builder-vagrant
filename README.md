@@ -16,6 +16,8 @@ Run `vagrant up bios` to boot the generated ISO in [BIOS](https://en.wikipedia.o
 
 Run `vagrant up efi` to boot the generated ISO in [EFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) mode.
 
+To build a netboot image, set the `LB_BUILD_TYPE` environment variable to `netboot` before launching vagrant, e.g. `LB_BUILD_TYPE=netboot vagrant up builder`. This will build the netboot image and copy it to the current directory as `live-image-amd64.netboot.tar`.
+
 
 # Burning the ISO file to a USB pen/disk drive
 

@@ -1,6 +1,13 @@
 #!/bin/bash
 set -eux
 
+
+# the build artifact type can be one of:
+#   iso (default)
+#   netboot
+LB_BUILD_TYPE="${LB_BUILD_TYPE:=iso}"
+
+
 echo 'Defaults env_keep += "DEBIAN_FRONTEND"' >/etc/sudoers.d/env_keep_apt
 chmod 440 /etc/sudoers.d/env_keep_apt
 export DEBIAN_FRONTEND=noninteractive
@@ -112,20 +119,30 @@ mkdir custom-image && pushd custom-image
 mkdir -p auto
 cp /usr/share/doc/live-build/examples/auto/* auto/
 
-cat >auto/config <<'EOF'
+if [ "$LB_BUILD_TYPE" == 'iso' ]; then
+lb_config='\
+    --binary-images iso-hybrid \
+    '
+else
+lb_config='\
+    --binary-images netboot \
+    --bootloader syslinux \
+    '
+fi
+cat >auto/config <<EOF
 #!/bin/sh
 set -eux
-lb config noauto \
-    --binary-images iso-hybrid \
-    --mode debian \
-    --distribution stretch \
-    --architectures amd64 \
-    --bootappend-live 'boot=live components username=vagrant' \
-    --mirror-bootstrap http://ftp.pt.debian.org/debian/ \
-    --mirror-binary http://ftp.pt.debian.org/debian/ \
-    --apt-indices false \
-    --memtest none \
-    "${@}"
+lb config noauto \\
+    $lb_config \\
+    --mode debian \\
+    --distribution stretch \\
+    --architectures amd64 \\
+    --bootappend-live 'boot=live components username=vagrant' \\
+    --mirror-bootstrap http://ftp.pt.debian.org/debian/ \\
+    --mirror-binary http://ftp.pt.debian.org/debian/ \\
+    --apt-indices false \\
+    --memtest none \\
+    "\${@}"
 EOF
 # NB --bootappend-live '... keyboard-layouts=pt' is currently broken. we have to manually configure the keyboard.
 #    see Re: Status of kbd console-data and console-setup at https://lists.debian.org/debian-devel/2016/08/msg00276.html
@@ -258,6 +275,7 @@ set -eux
 echo nls_ascii >>etc/initramfs-tools/modules # for booting from FAT32.
 EOF
 
+if [ "$LB_BUILD_TYPE" == 'iso' ]; then
 cat >config/hooks/normal/9990-bootloader-splash.hook.binary <<'EOF'
 #!/bin/sh
 set -eux
@@ -283,12 +301,14 @@ label hdt
 menu clear
 EOM
 EOF
+fi
 
 chmod +x config/hooks/normal/*.hook.*
 
 # build it.
 lb build
 
+if [ "$LB_BUILD_TYPE" == 'iso' ]; then
 # show some information about the generated iso file.
 fdisk -l live-image-amd64.hybrid.iso
 iso-info live-image-amd64.hybrid.iso --no-header
@@ -296,6 +316,10 @@ iso-info live-image-amd64.hybrid.iso --no-header
 
 # copy it on the host fs (it will be used by the target VM).
 cp live-image-amd64.hybrid.iso /vagrant
+else
+tar tf live-image-amd64.netboot.tar
+cp live-image-amd64.netboot.tar /vagrant
+fi
 
 # clean it.
 #lb clean
