@@ -1,4 +1,17 @@
+# to make sure the nodes are created sequentially, we
+# have to force a --no-parallel execution.
+ENV['VAGRANT_NO_PARALLEL'] = 'yes'
+
 Vagrant.configure('2') do |config|
+  config.vm.provider :libvirt do |lv, config|
+    lv.memory = 2048
+    lv.cpus = 2
+    lv.cpu_mode = 'host-passthrough'
+    # lv.nested = true
+    lv.keymap = 'pt'
+    config.vm.synced_folder '.', '/vagrant', type: 'nfs'
+  end
+
   config.vm.provider :virtualbox do |vb|
     vb.linked_clone = true
     vb.memory = 2048
@@ -14,8 +27,13 @@ Vagrant.configure('2') do |config|
   ['bios', 'efi'].each do |firmware|
     config.vm.define firmware do |config|
       config.vm.box = 'empty'
-      config.vm.synced_folder '.', '/vagrant', disabled: true
-      config.vm.provider :virtualbox do |vb|
+      config.vm.provider :libvirt do |lv, config|
+        lv.loader = '/usr/share/ovmf/OVMF.fd' if firmware == 'efi'
+        lv.boot 'cdrom'
+        lv.storage :file, :device => :cdrom, :path => "#{Dir.pwd}/live-image-amd64.hybrid.iso"
+        config.vm.synced_folder '.', '/vagrant', disabled: true
+      end
+      config.vm.provider :virtualbox do |vb, config|
         vb.check_guest_additions = false
         vb.functional_vboxsf = false
         vb.customize ['modifyvm', :id, '--firmware', firmware]
@@ -26,6 +44,7 @@ Vagrant.configure('2') do |config|
           '--type', 'dvddrive',
           '--tempeject', 'on',
           '--medium', 'live-image-amd64.hybrid.iso']
+        config.vm.synced_folder '.', '/vagrant', disabled: true
       end
     end
   end

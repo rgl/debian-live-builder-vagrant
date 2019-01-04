@@ -212,6 +212,8 @@ EOF
 mkdir -p config/includes.chroot/etc/profile.d
 cat >config/includes.chroot/etc/profile.d/login.sh <<'EOF'
 [[ "$-" != *i* ]] && return
+echo "Firmware: $([ -d /sys/firmware/efi ] && echo 'UEFI' || echo 'BIOS')"
+echo "Framebuffer resolution: $(cat /sys/class/graphics/fb0/virtual_size | tr , x)"
 export EDITOR=vim
 export PAGER=less
 alias l='ls -lF --color'
@@ -315,7 +317,7 @@ iso-info live-image-amd64.hybrid.iso --no-header
 #iso-info live-image-amd64.hybrid.iso --no-header -f | sed '0,/ISO-9660 Information/d' | sort -k 2
 
 # copy it on the host fs (it will be used by the target VM).
-cp live-image-amd64.hybrid.iso /vagrant
+cp -f live-image-amd64.hybrid.iso /vagrant
 else
 tar tf live-image-amd64.netboot.tar
 cp live-image-amd64.netboot.tar /vagrant
