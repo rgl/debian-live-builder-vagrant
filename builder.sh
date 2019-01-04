@@ -160,6 +160,7 @@ qemu-utils
 ntfs-3g
 exfat-fuse
 exfat-utils
+partclone
 hdparm
 usbutils
 eject
