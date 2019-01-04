@@ -161,6 +161,8 @@ ntfs-3g
 exfat-fuse
 exfat-utils
 partclone
+pigz
+pbzip2
 hdparm
 usbutils
 eject
