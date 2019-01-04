@@ -30,7 +30,8 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  config.trigger.before :up, :vm => ['bios', 'efi'] do
-    run './create_empty_box.sh'
+  config.trigger.before :up do |trigger|
+    trigger.only_on = ['bios', 'efi']
+    trigger.run = {inline: './create_empty_box.sh'}
   end
 end
