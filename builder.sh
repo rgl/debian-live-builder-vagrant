@@ -262,7 +262,7 @@ echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/vagrant
 # NB vagrant will replace this insecure key on the first vagrant up.
 install -d -m 700 /home/vagrant/.ssh
 cd /home/vagrant/.ssh
-wget -q --no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub -O authorized_keys
+wget -qOauthorized_keys https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
 chmod 600 authorized_keys
 cd ..
 
