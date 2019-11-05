@@ -255,9 +255,6 @@ set -eux
 adduser --gecos '' --disabled-login vagrant
 echo vagrant:vagrant | chpasswd -m
 
-# let him use root permissions without sudo asking for a password.
-echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/vagrant
-
 # install the vagrant public key.
 # NB vagrant will replace this insecure key on the first vagrant up.
 install -d -m 700 /home/vagrant/.ssh
