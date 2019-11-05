@@ -135,7 +135,7 @@ set -eux
 lb config noauto \\
     $lb_config \\
     --mode debian \\
-    --distribution stretch \\
+    --distribution buster \\
     --architectures amd64 \\
     --bootappend-live 'boot=live components username=vagrant' \\
     --mirror-bootstrap http://ftp.pt.debian.org/debian/ \\
@@ -166,6 +166,7 @@ pbzip2
 hdparm
 usbutils
 eject
+wget
 EOF
 
 mkdir -p config/preseed
