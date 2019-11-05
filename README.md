@@ -34,6 +34,6 @@ eject /dev/sdd
 
 # Reference
 
-* [Live Systems Manual](http://debian-live.alioth.debian.org/live-manual/stable/manual/html/live-manual.en.html)
-* [Debian Live Developer Information](http://debian-live.alioth.debian.org/)
+* [Live Systems Manual](https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html)
+* [Debian Live Team Repositories](https://salsa.debian.org/live-team)
 * [Debian Live Wiki](http://wiki.debian.org/DebianLive): Information about the Debian Live team and its contacts.
