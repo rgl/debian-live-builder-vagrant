@@ -160,6 +160,8 @@ qemu-utils
 ntfs-3g
 exfat-fuse
 exfat-utils
+cifs-utils
+sshfs
 partclone
 pigz
 pbzip2
@@ -203,6 +205,11 @@ List disks:
     lsblk -O
     lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
 
+Mount remote file systems:
+
+    sshfs user@server:/home/user /mnt # sshfs
+    mount -t cifs -o username=user,password=pass //server/share /mnt # cifs/smb
+
 HINT: Press the up/down arrow keys to navigate the history.
 EOF
 
@@ -211,6 +218,8 @@ cat >config/includes.chroot/root/.bash_history <<'EOF'
 loadkeys us
 loadkeys pt-latin1
 lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
+sshfs user@server:/home/user /mnt # sshfs
+mount -t cifs -o username=user,password=pass //server/share /mnt # cifs/smb
 EOF
 
 mkdir -p config/includes.chroot/etc/profile.d
