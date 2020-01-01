@@ -169,6 +169,7 @@ hdparm
 usbutils
 eject
 wget
+cloud-init
 EOF
 
 mkdir -p config/preseed
