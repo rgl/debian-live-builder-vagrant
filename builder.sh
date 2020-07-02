@@ -144,6 +144,7 @@ lb config noauto \\
     --memtest none \\
     "\${@}"
 EOF
+# NB use --bootappend-live '... noautologin' to ask the user to enter a password to use the system.
 # NB --bootappend-live '... keyboard-layouts=pt' is currently broken. we have to manually configure the keyboard.
 #    see Re: Status of kbd console-data and console-setup at https://lists.debian.org/debian-devel/2016/08/msg00276.html
 chmod +x auto/config
@@ -277,6 +278,9 @@ set -eux
 # create the vagrant user and group.
 adduser --gecos '' --disabled-login vagrant
 echo vagrant:vagrant | chpasswd -m
+
+# let him use root permissions without sudo asking for a password.
+echo 'vagrant ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/vagrant
 
 # install the vagrant public key.
 # NB vagrant will replace this insecure key on the first vagrant up.
