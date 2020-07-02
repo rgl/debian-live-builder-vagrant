@@ -150,26 +150,32 @@ chmod +x auto/config
 
 mkdir -p config/package-lists
 cat >config/package-lists/custom.list.chroot <<'EOF'
+cifs-utils
+cloud-init
 console-data
 debconf-utils
-openssh-server
-less
-vim
-tcpdump
-qemu-utils
-ntfs-3g
+efibootmgr
+eject
 exfat-fuse
 exfat-utils
-cifs-utils
-sshfs
-partclone
-pigz
-pbzip2
+fbset
 hdparm
+hwinfo
+less
+ntfs-3g
+openssh-server
+partclone
+pbzip2
+pciutils
+pigz
+qemu-utils
+screen
+sshfs
+sysstat
+tcpdump
 usbutils
-eject
+vim
 wget
-cloud-init
 EOF
 
 mkdir -p config/preseed
@@ -218,9 +224,15 @@ mkdir -p config/includes.chroot/root
 cat >config/includes.chroot/root/.bash_history <<'EOF'
 loadkeys us
 loadkeys pt-latin1
+efibootmgr -v
+hwinfo --network
+showconsolefont
 lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
 sshfs user@server:/home/user /mnt # sshfs
 mount -t cifs -o username=user,password=pass //server/share /mnt # cifs/smb
+mount /dev/DEVHERE /mnt
+qemu-img info /dev/DEVHERE
+qemu-img convert -p /vagrant/tmp/box-disk1.vmdk /dev/DEVHERE
 EOF
 
 mkdir -p config/includes.chroot/etc/profile.d
