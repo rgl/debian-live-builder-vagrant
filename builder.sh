@@ -233,7 +233,7 @@ sshfs user@server:/home/user /mnt # sshfs
 mount -t cifs -o vers=3,username=user,password=pass //server/share /mnt # cifs/smb
 mount /dev/DEVHERE /mnt
 qemu-img info /dev/DEVHERE
-qemu-img convert -p /vagrant/tmp/box-disk1.vmdk /dev/DEVHERE
+qemu-img convert -p -W /vagrant/tmp/box-disk1.vmdk /dev/DEVHERE
 EOF
 
 mkdir -p config/includes.chroot/etc/profile.d
