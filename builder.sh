@@ -163,7 +163,8 @@ fbset
 hdparm
 hwinfo
 less
-mmc-utils # see https://www.kernel.org/doc/Documentation/mmc/
+# see https://www.kernel.org/doc/Documentation/mmc/
+mmc-utils
 ntfs-3g
 openssh-server
 partclone
@@ -175,6 +176,7 @@ screen
 sshfs
 sysstat
 tcpdump
+tpm2-tools
 usbutils
 vim
 wget
