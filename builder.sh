@@ -135,7 +135,7 @@ set -eux
 lb config noauto \\
     $lb_config \\
     --mode debian \\
-    --distribution buster \\
+    --distribution bullseye \\
     --architectures amd64 \\
     --bootappend-live 'boot=live components username=vagrant' \\
     --mirror-bootstrap http://ftp.pt.debian.org/debian/ \\
@@ -157,8 +157,7 @@ console-data
 debconf-utils
 efibootmgr
 eject
-exfat-fuse
-exfat-utils
+exfatprogs
 fbset
 hdparm
 hwinfo
@@ -318,9 +317,9 @@ EOF
 cat >config/hooks/normal/9990-bootloader-menu.hook.binary <<'EOF'
 #!/bin/sh
 set -eux
-sed -i -E 's,^(set default=.+),\1\nset timeout=5,' boot/grub/grub.cfg
+sed -i -E 's,^(set default=.+),\1\nset timeout=5,' boot/grub/config.cfg
 sed -i -E 's,^(timeout ).+,\150,' isolinux/isolinux.cfg
-rm isolinux/advanced.cfg
+rm isolinux/utilities.cfg
 cat >isolinux/menu.cfg <<'EOM'
 menu hshift 0
 menu width 82

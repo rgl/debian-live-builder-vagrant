@@ -9,7 +9,7 @@ Vagrant.configure('2') do |config|
     lv.cpu_mode = 'host-passthrough'
     # lv.nested = true # nested virtualization.
     lv.keymap = 'pt'
-    config.vm.synced_folder '.', '/vagrant', type: 'nfs'
+    config.vm.synced_folder '.', '/vagrant', type: 'nfs', nfs_version: '4.2', nfs_udp: false
   end
 
   config.vm.provider :virtualbox do |vb|
@@ -34,7 +34,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.define :builder do |config|
-    config.vm.box = 'debian-10-amd64'
+    config.vm.box = 'debian-11-amd64'
     config.vm.hostname = 'builder'
     config.vm.provision :shell, path: 'builder.sh', env: {'LB_BUILD_TYPE' => ENV['LB_BUILD_TYPE'] || 'iso'}
   end
@@ -46,6 +46,8 @@ Vagrant.configure('2') do |config|
         lv.loader = '/usr/share/ovmf/OVMF.fd' if firmware == 'efi'
         lv.boot 'cdrom'
         lv.storage :file, :device => :cdrom, :path => "#{Dir.pwd}/live-image-amd64.hybrid.iso"
+        lv.graphics_type = 'spice'
+        lv.video_type = 'virtio'
         config.vm.synced_folder '.', '/vagrant', disabled: true
       end
       config.vm.provider :virtualbox do |vb, config|
