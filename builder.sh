@@ -167,6 +167,7 @@ mmc-utils
 ntfs-3g
 openssh-server
 partclone
+parted
 pbzip2
 pciutils
 pigz
@@ -292,7 +293,7 @@ wget -qOauthorized_keys https://raw.githubusercontent.com/hashicorp/vagrant/mast
 chmod 600 authorized_keys
 cd ..
 
-# populate the bash history. 
+# populate the bash history.
 cat >.bash_history <<'EOS'
 sudo su -l
 EOS
