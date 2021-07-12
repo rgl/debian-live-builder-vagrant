@@ -1,11 +1,16 @@
 #!/bin/bash
-set -eux
+set -euxo pipefail
 
 
 # the build artifact type can be one of:
 #   iso (default)
 #   netboot
 LB_BUILD_TYPE="${LB_BUILD_TYPE:=iso}"
+
+# the build architecture can be one of:
+#   amd64 (default)
+#   arm64
+LB_BUILD_ARCH="${LB_BUILD_ARCH:=amd64}"
 
 
 echo 'Defaults env_keep += "DEBIAN_FRONTEND"' >/etc/sudoers.d/env_keep_apt
@@ -75,6 +80,7 @@ EOF
 # install dependencies.
 
 apt-get install -y libcdio-utils librsvg2-bin pngquant
+apt-get install -y qemu-user-static
 
 
 #
@@ -106,7 +112,7 @@ fi
 #
 # build a custom live image.
 
-mkdir custom-image && pushd custom-image
+mkdir custom-image-$LB_BUILD_ARCH && pushd custom-image-$LB_BUILD_ARCH
 
 # configure it.
 # see https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html
@@ -129,6 +135,13 @@ lb_config='\
     --bootloader syslinux \
     '
 fi
+if [ "$LB_BUILD_ARCH" == 'arm64' ]; then
+lb_config="$lb_config \\
+    --bootloader grub-efi \\
+    --bootstrap-qemu-arch arm64 \\
+    --bootstrap-qemu-static /usr/bin/qemu-arm-static \\
+    "
+fi
 cat >auto/config <<EOF
 #!/bin/sh
 set -eux
@@ -136,7 +149,7 @@ lb config noauto \\
     $lb_config \\
     --mode debian \\
     --distribution bullseye \\
-    --architectures amd64 \\
+    --architectures $LB_BUILD_ARCH \\
     --bootappend-live 'boot=live components username=vagrant' \\
     --mirror-bootstrap http://ftp.pt.debian.org/debian/ \\
     --mirror-binary http://ftp.pt.debian.org/debian/ \\
@@ -308,6 +321,7 @@ echo nls_ascii >>etc/initramfs-tools/modules # for booting from FAT32.
 EOF
 
 if [ "$LB_BUILD_TYPE" == 'iso' ]; then
+if [ "$LB_BUILD_ARCH" == 'amd64' ]; then
 cat >config/hooks/normal/9990-bootloader-splash.hook.binary <<'EOF'
 #!/bin/sh
 set -eux
@@ -334,6 +348,7 @@ menu clear
 EOM
 EOF
 fi
+fi
 
 chmod +x config/hooks/normal/*.hook.*
 
@@ -342,15 +357,15 @@ lb build
 
 if [ "$LB_BUILD_TYPE" == 'iso' ]; then
 # show some information about the generated iso file.
-fdisk -l live-image-amd64.hybrid.iso
-iso-info live-image-amd64.hybrid.iso --no-header
-#iso-info live-image-amd64.hybrid.iso --no-header -f | sed '0,/ISO-9660 Information/d' | sort -k 2
+fdisk -l live-image-$LB_BUILD_ARCH.hybrid.iso
+iso-info live-image-$LB_BUILD_ARCH.hybrid.iso --no-header
+#iso-info live-image-$LB_BUILD_ARCH..hybrid.iso --no-header -f | sed '0,/ISO-9660 Information/d' | sort -k 2
 
 # copy it on the host fs (it will be used by the target VM).
-cp -f live-image-amd64.hybrid.iso /vagrant
+cp -f live-image-$LB_BUILD_ARCH.hybrid.iso /vagrant
 else
-tar tf live-image-amd64.netboot.tar
-cp live-image-amd64.netboot.tar /vagrant
+tar tf live-image-$LB_BUILD_ARCH.netboot.tar
+cp live-image-$LB_BUILD_ARCH.netboot.tar /vagrant
 fi
 
 # clean it.
