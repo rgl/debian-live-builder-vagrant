@@ -35,5 +35,8 @@ eject /dev/sdd
 # Reference
 
 * [Live Systems Manual](https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html)
+* [lb(1)](https://manpages.debian.org/bullseye/live-build/lb.1.en.html)
+* [live-build(7)](https://manpages.debian.org/bullseye/live-build/live-build.7.en.html)
+* [lb_config(1)](https://manpages.debian.org/bullseye/live-build/lb_config.1.en.html)
 * [Debian Live Team Repositories](https://salsa.debian.org/live-team)
 * [Debian Live Wiki](http://wiki.debian.org/DebianLive): Information about the Debian Live team and its contacts.

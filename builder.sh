@@ -109,12 +109,12 @@ fi
 mkdir custom-image && pushd custom-image
 
 # configure it.
-# see http://debian-live.alioth.debian.org/live-manual/stable/manual/html/live-manual.en.html
-# see lb(1)
-# see live-build(7)
-# see lb_config(1)
-# NB default images configurations are defined in a branch at https://anonscm.debian.org/git/debian-live/live-images.git/
-#    e.g. https://anonscm.debian.org/git/debian-live/live-images.git/tree/images/standard?h=debian
+# see https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html
+# see lb(1) at https://manpages.debian.org/bullseye/live-build/lb.1.en.html
+# see live-build(7) at https://manpages.debian.org/bullseye/live-build/live-build.7.en.html
+# see lb_config(1) at https://manpages.debian.org/bullseye/live-build/lb_config.1.en.html
+# NB default images configurations are defined in a branch at https://salsa.debian.org/live-team/live-images
+#    e.g. https://salsa.debian.org/live-team/live-images/-/tree/debian/images/standard
 
 mkdir -p auto
 cp /usr/share/doc/live-build/examples/auto/* auto/
