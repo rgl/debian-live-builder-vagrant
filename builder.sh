@@ -350,6 +350,18 @@ EOF
 fi
 fi
 
+# remove the boot files (e.g. linux and initrd) because they will be served
+# from the network and do not need to use space in the filesystem.
+# NB this is used by mksquashfs as -wildcards -ef /excludes.
+# see /usr/lib/live/build/binary_rootfs
+# see https://manpages.debian.org/bullseye/squashfs-tools/mksquashfs.1.en.html#ef
+install -d config/rootfs
+cat >config/rootfs/excludes <<'EOF'
+boot/
+vmlinuz*
+initrd.img*
+EOF
+
 chmod +x config/hooks/normal/*.hook.*
 
 # build it.
