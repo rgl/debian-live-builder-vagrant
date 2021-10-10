@@ -214,6 +214,13 @@ dpkg-reconfigure console-common
 EOF
 chmod +x config/includes.chroot/lib/live/config/0149-keyboard
 
+# configure the system to go get its hostname and domain from dhcp.
+# NB dhclient will set the hostname from dhcp iif the current hostname
+#    is blank, "(none)", or "localhost".
+# see set_hostname at /sbin/dhclient-script
+mkdir -p config/includes.chroot/etc
+echo localhost >config/includes.chroot/etc/hostname
+
 mkdir -p config/includes.chroot/etc
 cat >config/includes.chroot/etc/motd <<'EOF'
 
