@@ -128,6 +128,8 @@ cp /usr/share/doc/live-build/examples/auto/* auto/
 if [ "$LB_BUILD_TYPE" == 'iso' ]; then
 lb_config='\
     --binary-images iso-hybrid \
+    --iso-application "Debian Live Builder" \
+    --iso-publisher https://github.com/rgl/debian-live-builder-vagrant \
     '
 else
 lb_config='\
