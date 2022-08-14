@@ -174,6 +174,24 @@ efibootmgr
 eject
 exfatprogs
 fbset
+# NB fwupd fwupdmgr requires a uefi esp. to wipe the whole disk and create one
+#    you can execute, e.g.:
+#       lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
+#       wipefs --all /dev/sda
+#       parted --script /dev/sda mklabel gpt
+#       parted --script /dev/sda mkpart esp fat32 1MiB 100MiB
+#       parted --script /dev/sda set 1 esp on
+#       mkfs -t vfat -n ESP /dev/sda1
+#       systemctl restart fwupd.service
+#    see https://github.com/fwupd/fwupd/wiki/PluginFlag:esp-not-found
+# NB fwupd fwupdmgr will write the firmware files to the uefi partition under
+#    the debian directory and configure the system to boot from the
+#    fwupdx64.efi binary. something like the following uefi boot option will
+#    be created:
+#       Boot0002* Linux Firmware Updater	HD(1,GPT,9099f276-6fc1-4229-8315-55fc00fed26a,0x800,0x32000)/File(\EFI\debian\fwupdx64.efi)
+#    but after the firmware installation, and since this is a stateless live
+#    environment, you need to manually delete the files from the uefi esp.
+fwupd
 hdparm
 hwinfo
 less
@@ -251,6 +269,9 @@ cat >config/includes.chroot/root/.bash_history <<'EOF'
 loadkeys us
 loadkeys pt-latin1
 efibootmgr -v
+fwupdmgr get-devices --show-all
+fwupdmgr get-updates
+fwupdmgr update
 hwinfo --network
 showconsolefont
 lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
