@@ -48,7 +48,7 @@ Vagrant.configure('2') do |config|
       config.vm.provider :libvirt do |lv, config|
         lv.loader = '/usr/share/ovmf/OVMF.fd' if firmware == 'efi'
         lv.boot 'cdrom'
-        lv.storage :file, :device => :cdrom, :path => "#{Dir.pwd}/live-image-amd64.hybrid.iso"
+        lv.storage :file, :device => :cdrom, :bus => 'sata', :path => "#{Dir.pwd}/live-image-amd64.hybrid.iso"
         lv.graphics_type = 'spice'
         lv.video_type = 'virtio'
         config.vm.synced_folder '.', '/vagrant', disabled: true
