@@ -198,6 +198,7 @@ less
 # see https://www.kernel.org/doc/Documentation/mmc/
 mmc-utils
 ntfs-3g
+open-iscsi
 openssh-server
 partclone
 parted
@@ -260,6 +261,9 @@ Mount remote file systems:
 
     sshfs user@server:/home/user /mnt # sshfs
     mount -t cifs -o username=user,password=pass //server/share /mnt # cifs/smb
+    iscsiadm --mode discovery --type sendtargets --portal 10.10.0.2:3260
+    iscsiadm --mode node --targetname iqn.2005-10.org.freenas.ctl:test --login
+    mount -o noatime,ro /dev/sdb /mnt
 
 HINT: Press the up/down arrow keys to navigate the history.
 EOF
@@ -277,7 +281,9 @@ showconsolefont
 lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
 sshfs user@server:/home/user /mnt # sshfs
 mount -t cifs -o vers=3,username=user,password=pass //server/share /mnt # cifs/smb
-mount /dev/DEVHERE /mnt
+iscsiadm --mode discovery --type sendtargets --portal 10.10.0.2:3260
+iscsiadm --mode node --targetname iqn.2005-10.org.freenas.ctl:test --login
+mount -o noatime,ro /dev/DEVHERE /mnt
 qemu-img info /dev/DEVHERE
 qemu-img convert -p -W /vagrant/tmp/box-disk1.vmdk /dev/DEVHERE
 EOF
