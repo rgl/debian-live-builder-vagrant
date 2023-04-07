@@ -99,6 +99,8 @@ ssh vagrant@localhost -p 2222
 * [lb(1)](https://manpages.debian.org/bullseye/live-build/lb.1.en.html)
 * [live-build(7)](https://manpages.debian.org/bullseye/live-build/live-build.7.en.html)
 * [lb_config(1)](https://manpages.debian.org/bullseye/live-build/lb_config.1.en.html)
+* [initramfs-tools(7)](https://manpages.debian.org/bullseye/initramfs-tools-core/initramfs-tools.7.en.html)
 * [Debian Live Team Repositories](https://salsa.debian.org/live-team)
 * [Debian Live Wiki](http://wiki.debian.org/DebianLive): Information about the Debian Live team and its contacts.
 * [run emulated arm under qemu](https://gist.github.com/rgl/b02c24f9eb1b4bdb4ac6f970d4bfc885)
+* [iSCSI and iBFT test using QEMU/KVM and iPXE](https://gist.github.com/smoser/810d59f0dd580b1c1256)

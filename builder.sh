@@ -90,6 +90,14 @@ apt-get install -y live-build
 
 
 #
+# install optional packages for easier reference.
+# NB these are useful for looking at the source code.
+# NB these are not really needed to create a live system (only live-build is required).
+
+apt-get install -y live-boot live-config open-iscsi man
+
+
+#
 # build the Debian Standard live image (from the debian branch).
 # see lb_config(1)
 # NB default images configurations are defined in a branch at https://anonscm.debian.org/git/debian-live/live-images.git/
@@ -281,6 +289,9 @@ showconsolefont
 lsblk -x KNAME -o KNAME,SIZE,TRAN,SUBSYSTEMS,FSTYPE,UUID,LABEL,MODEL,SERIAL
 sshfs user@server:/home/user /mnt # sshfs
 mount -t cifs -o vers=3,username=user,password=pass //server/share /mnt # cifs/smb
+cat /sys/firmware/ibft/initiator/initiator-name
+cat /sys/firmware/ibft/target0/ip-addr
+cat /sys/firmware/ibft/target0/target-name
 iscsiadm --mode discovery --type sendtargets --portal 10.10.0.2:3260
 iscsiadm --mode node --targetname iqn.2005-10.org.freenas.ctl:test --login
 mount -o noatime,ro /dev/DEVHERE /mnt
@@ -349,6 +360,44 @@ EOS
 
 chown -R vagrant:vagrant .
 EOF
+
+# add support for booting from iscsi ibft.
+# NB this is a simplified version of the following open-iscsi package files:
+#       /usr/share/initramfs-tools/hooks/iscsi
+#       /usr/share/initramfs-tools/scripts/local-bottom/iscsi
+#       /usr/share/initramfs-tools/scripts/local-top/iscsi
+# NB add break=mount to the kernel command line to stop the initramfs init
+#    before mounting the root filesystem.
+mkdir -p config/includes.chroot/usr/share/initramfs-tools/scripts/live-top
+cat >config/includes.chroot/usr/share/initramfs-tools/scripts/live-top/iscsi_ibft <<'EOF'
+#!/bin/sh -eu
+case "${1:-}" in
+prereqs)
+    exit 0
+    ;;
+esac
+
+# load the iscsi_ibft module.
+udevadm settle
+modprobe iscsi_ibft
+
+# bail when we are not booting from iscsi.
+if [ ! -e /sys/firmware/ibft/target0/target-name ]; then
+    exit 0
+fi
+
+# load the iscsi module.
+modprobe iscsi_tcp
+
+# connect to the iscsi network.
+iscsistart -N
+
+# connect to the iscsi target.
+until iscsistart -b; do
+    sleep 3
+done
+EOF
+chmod +x config/includes.chroot/usr/share/initramfs-tools/scripts/live-top/iscsi_ibft
 
 cat >config/hooks/normal/9990-initrd.hook.chroot <<'EOF'
 #!/bin/sh
