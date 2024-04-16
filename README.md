@@ -4,11 +4,23 @@ This is a [Vagrant](https://www.vagrantup.com/) Environment for creating custom 
 
 Install the [Base Debian Vagrant Box](https://github.com/rgl/debian-vagrant).
 
-Run `vagrant up builder --no-destroy-on-error` to launch the debian live builder. This will build the ISO image and copy it to the current directory as `live-image-amd64.hybrid.iso`.
+Launch the debian live builder, this will build the ISO image and copy it to the current directory as `live-image-amd64.hybrid.iso`:
 
-Run `vagrant up bios` to boot the generated ISO in [BIOS](https://en.wikipedia.org/wiki/BIOS) mode.
+```bash
+vagrant up builder --no-destroy-on-error
+```
 
-Run `vagrant up efi` to boot the generated ISO in [EFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) mode.
+Boot the generated ISO in [BIOS](https://en.wikipedia.org/wiki/BIOS) mode:
+
+```bash
+vagrant up bios --no-destroy-on-error
+```
+
+Boot the generated ISO in [EFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) mode:
+
+```bash
+vagrant up efi --no-destroy-on-error
+```
 
 To build a netboot image, set the `LB_BUILD_TYPE` environment variable to `netboot` before launching vagrant, e.g. `LB_BUILD_TYPE=netboot vagrant up builder`. This will build the netboot image and copy it to the current directory as `live-image-amd64.netboot.tar`.
 
@@ -47,7 +59,7 @@ The arm64 architecture image can be executed in an emulated virtual machine as:
 #    virtio-gpu-pci and serial0 console.
 mkdir tmp
 cd tmp
-sudo apt-get install -y qemu-efi-aarch64 cloud-image-utils
+sudo apt-get install -y qemu-system-arm qemu-efi-aarch64 cloud-image-utils
 cat >cloud-init-user-data.yml <<EOF
 #cloud-config
 hostname: arm64
@@ -96,10 +108,10 @@ ssh vagrant@localhost -p 2222
 # Reference
 
 * [Live Systems Manual](https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html)
-* [lb(1)](https://manpages.debian.org/bullseye/live-build/lb.1.en.html)
-* [live-build(7)](https://manpages.debian.org/bullseye/live-build/live-build.7.en.html)
-* [lb_config(1)](https://manpages.debian.org/bullseye/live-build/lb_config.1.en.html)
-* [initramfs-tools(7)](https://manpages.debian.org/bullseye/initramfs-tools-core/initramfs-tools.7.en.html)
+* [lb(1)](https://manpages.debian.org/bookworm/live-build/lb.1.en.html)
+* [live-build(7)](https://manpages.debian.org/bookworm/live-build/live-build.7.en.html)
+* [lb_config(1)](https://manpages.debian.org/bookworm/live-build/lb_config.1.en.html)
+* [initramfs-tools(7)](https://manpages.debian.org/bookworm/initramfs-tools-core/initramfs-tools.7.en.html)
 * [Debian Live Team Repositories](https://salsa.debian.org/live-team)
 * [Debian Live Wiki](http://wiki.debian.org/DebianLive): Information about the Debian Live team and its contacts.
 * [run emulated arm under qemu](https://gist.github.com/rgl/b02c24f9eb1b4bdb4ac6f970d4bfc885)

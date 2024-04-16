@@ -4,7 +4,7 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 Vagrant.configure('2') do |config|
   config.vm.provider :libvirt do |lv, config|
-    lv.memory = 2048
+    lv.memory = 2 * 1024
     lv.cpus = 4
     lv.cpu_mode = 'host-passthrough'
     # lv.nested = true # nested virtualization.
@@ -14,7 +14,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.provider :hyperv do |hv, config|
     hv.linked_clone = true
-    hv.memory = 2048
+    hv.memory = 2 * 1024
     hv.cpus = 4
     # hv.enable_virtualization_extensions = true # nested virtualization.
     hv.vlan_id = ENV['HYPERV_VLAN_ID']
@@ -28,7 +28,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.define :builder do |config|
-    config.vm.box = 'debian-11-amd64'
+    config.vm.box = 'debian-12-amd64'
     config.vm.hostname = 'builder'
     config.vm.provision :shell, path: 'builder.sh', env: {
       'LB_BUILD_TYPE' => ENV['LB_BUILD_TYPE'] || 'iso',

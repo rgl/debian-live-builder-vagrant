@@ -124,9 +124,9 @@ mkdir custom-image-$LB_BUILD_ARCH && pushd custom-image-$LB_BUILD_ARCH
 
 # configure it.
 # see https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html
-# see lb(1) at https://manpages.debian.org/bullseye/live-build/lb.1.en.html
-# see live-build(7) at https://manpages.debian.org/bullseye/live-build/live-build.7.en.html
-# see lb_config(1) at https://manpages.debian.org/bullseye/live-build/lb_config.1.en.html
+# see lb(1) at https://manpages.debian.org/bookworm/live-build/lb.1.en.html
+# see live-build(7) at https://manpages.debian.org/bookworm/live-build/live-build.7.en.html
+# see lb_config(1) at https://manpages.debian.org/bookworm/live-build/lb_config.1.en.html
 # NB default images configurations are defined in a branch at https://salsa.debian.org/live-team/live-images
 #    e.g. https://salsa.debian.org/live-team/live-images/-/tree/debian/images/standard
 
@@ -158,8 +158,11 @@ set -eux
 lb config noauto \\
     $lb_config \\
     --mode debian \\
-    --distribution bullseye \\
+    --distribution bookworm \\
     --architectures $LB_BUILD_ARCH \\
+    --archive-areas main,non-free-firmware \\
+    --firmware-binary false \\
+    --firmware-chroot false \\
     --bootappend-live 'boot=live components username=vagrant' \\
     --mirror-bootstrap http://ftp.pt.debian.org/debian/ \\
     --mirror-binary http://ftp.pt.debian.org/debian/ \\
@@ -339,7 +342,7 @@ cat >config/hooks/normal/9990-vagrant-user.hook.chroot <<'EOF'
 set -eux
 
 # create the vagrant user and group.
-adduser --gecos '' --disabled-login vagrant
+adduser --gecos '' vagrant
 echo vagrant:vagrant | chpasswd -m
 
 # let him use root permissions without sudo asking for a password.
@@ -439,7 +442,7 @@ fi
 # from the network and do not need to use space in the filesystem.
 # NB this is used by mksquashfs as -wildcards -ef /excludes.
 # see /usr/lib/live/build/binary_rootfs
-# see https://manpages.debian.org/bullseye/squashfs-tools/mksquashfs.1.en.html#ef
+# see https://manpages.debian.org/bookworm/squashfs-tools/mksquashfs.1.en.html#ef
 install -d config/rootfs
 cat >config/rootfs/excludes <<'EOF'
 boot/
