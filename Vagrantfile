@@ -12,12 +12,6 @@ Vagrant.configure('2') do |config|
     config.vm.synced_folder '.', '/vagrant', type: 'nfs', nfs_version: '4.2', nfs_udp: false
   end
 
-  config.vm.provider :virtualbox do |vb|
-    vb.linked_clone = true
-    vb.memory = 2048
-    vb.customize ['modifyvm', :id, '--cableconnected1', 'on']
-  end
-
   config.vm.provider :hyperv do |hv, config|
     hv.linked_clone = true
     hv.memory = 2048
@@ -51,19 +45,6 @@ Vagrant.configure('2') do |config|
         lv.storage :file, :device => :cdrom, :bus => 'sata', :path => "#{Dir.pwd}/live-image-amd64.hybrid.iso"
         lv.graphics_type = 'spice'
         lv.video_type = 'virtio'
-        config.vm.synced_folder '.', '/vagrant', disabled: true
-      end
-      config.vm.provider :virtualbox do |vb, config|
-        vb.check_guest_additions = false
-        vb.functional_vboxsf = false
-        vb.customize ['modifyvm', :id, '--firmware', firmware]
-        vb.customize ['storageattach', :id,
-          '--storagectl', 'IDE Controller',
-          '--device', '0',
-          '--port', '1',
-          '--type', 'dvddrive',
-          '--tempeject', 'on',
-          '--medium', 'live-image-amd64.hybrid.iso']
         config.vm.synced_folder '.', '/vagrant', disabled: true
       end
     end
