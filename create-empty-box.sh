@@ -13,7 +13,8 @@ cp "$TEMPLATE_BOX/Vagrantfile" .
 echo '{"format":"qcow2","provider":"libvirt","virtual_size":10}' >metadata.json
 qemu-img create -f qcow2 box.img 10G
 tar cvzf empty.box metadata.json Vagrantfile box.img
-vagrant box add --force empty empty.box
+../box-metadata.sh libvirt empty empty.box
+vagrant box add --force empty empty.box.json
 fi
 
 popd
