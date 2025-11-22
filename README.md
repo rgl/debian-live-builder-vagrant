@@ -108,10 +108,10 @@ ssh vagrant@localhost -p 2222
 # Reference
 
 * [Live Systems Manual](https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html)
-* [lb(1)](https://manpages.debian.org/bookworm/live-build/lb.1.en.html)
-* [live-build(7)](https://manpages.debian.org/bookworm/live-build/live-build.7.en.html)
-* [lb_config(1)](https://manpages.debian.org/bookworm/live-build/lb_config.1.en.html)
-* [initramfs-tools(7)](https://manpages.debian.org/bookworm/initramfs-tools-core/initramfs-tools.7.en.html)
+* [lb(1)](https://manpages.debian.org/trixie/live-build/lb.1.en.html)
+* [live-build(7)](https://manpages.debian.org/trixie/live-build/live-build.7.en.html)
+* [lb_config(1)](https://manpages.debian.org/trixie/live-build/lb_config.1.en.html)
+* [initramfs-tools(7)](https://manpages.debian.org/trixie/initramfs-tools-core/initramfs-tools.7.en.html)
 * [Debian Live Team Repositories](https://salsa.debian.org/live-team)
 * [Debian Live Wiki](http://wiki.debian.org/DebianLive): Information about the Debian Live team and its contacts.
 * [run emulated arm under qemu](https://gist.github.com/rgl/b02c24f9eb1b4bdb4ac6f970d4bfc885)

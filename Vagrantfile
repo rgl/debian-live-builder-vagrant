@@ -28,7 +28,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.define :builder do |config|
-    config.vm.box = 'debian-12-amd64'
+    config.vm.box = 'debian-13-amd64'
     config.vm.hostname = 'builder'
     config.vm.provision :shell, path: 'builder.sh', env: {
       'LB_BUILD_TYPE' => ENV['LB_BUILD_TYPE'] || 'iso',

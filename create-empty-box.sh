@@ -6,7 +6,7 @@ mkdir -p tmp-empty-box
 pushd tmp-empty-box
 
 # create and add an empty box to the libvirt provider.
-TEMPLATE_BOX=~/.vagrant.d/boxes/debian-12-amd64/0.0.0/libvirt
+TEMPLATE_BOX=~/.vagrant.d/boxes/debian-13-amd64/0.0.0/libvirt
 if [ ! -d ~/.vagrant.d/boxes/empty/0.0.0/libvirt ] && [ -d "$TEMPLATE_BOX" ]; then
 rm -f *
 cp "$TEMPLATE_BOX/Vagrantfile" .
