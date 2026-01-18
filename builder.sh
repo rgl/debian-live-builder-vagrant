@@ -12,6 +12,9 @@ LB_BUILD_TYPE="${LB_BUILD_TYPE:=iso}"
 #   arm64
 LB_BUILD_ARCH="${LB_BUILD_ARCH:=amd64}"
 
+# the debian mirror.
+BUILD_DEBIAN_MIRROR="${BUILD_DEBIAN_MIRROR:=http://ftp.pt.debian.org/debian}"
+
 
 echo 'Defaults env_keep += "DEBIAN_FRONTEND"' >/etc/sudoers.d/env_keep_apt
 chmod 440 /etc/sudoers.d/env_keep_apt
@@ -178,8 +181,8 @@ lb config noauto \\
     --firmware-binary false \\
     --firmware-chroot false \\
     --bootappend-live 'boot=live components username=vagrant' \\
-    --mirror-bootstrap http://ftp.pt.debian.org/debian/ \\
-    --mirror-binary http://ftp.pt.debian.org/debian/ \\
+    --mirror-bootstrap $BUILD_DEBIAN_MIRROR \\
+    --mirror-binary $BUILD_DEBIAN_MIRROR \\
     --apt-indices false \\
     --memtest none \\
     "\${@}"
