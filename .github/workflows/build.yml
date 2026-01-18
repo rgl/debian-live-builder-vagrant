@@ -1,0 +1,79 @@
+name: build
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: amd64
+            runner: ubuntu-24.04
+          - name: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    container:
+      image: debian:13
+      options: >-
+        --privileged
+        -v "${{ github.workspace }}:/vagrant"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      # NB GitHub-hosted runners have limited available disk space.
+      #    see https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+      - name: Show runner details
+        run: |
+          set -eux
+          cat /etc/os-release
+          id
+          df -h
+      - name: Build
+        env:
+          LB_BUILD_ARCH: ${{ matrix.name }}
+        run: bash builder.sh
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.name }}
+          path: |
+            *.iso
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Release
+    runs-on: ubuntu-24.04
+    needs:
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Release notes
+        run: |
+          set -eux
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          for f in artifacts/*/*.iso; do
+            ARCH="$(basename "$(dirname "$f")")"
+            mv "$f" "debian-live-$VERSION-$ARCH.iso"
+          done
+          ls -laF *.iso
+          cat >release-notes.md <<EOF
+          # Debian 13 (trixie)
+
+          ## SHA256SUMS
+
+          \`\`\`
+          $(sha256sum *.iso)
+          \`\`\`
+          EOF
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          bodyFile: release-notes.md
+          artifacts: '*.iso'
+          token: ${{ secrets.GITHUB_TOKEN }}

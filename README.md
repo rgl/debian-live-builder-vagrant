@@ -1,3 +1,5 @@
+[![build](https://github.com/rgl/debian-live-builder-vagrant/actions/workflows/build.yml/badge.svg)](https://github.com/rgl/debian-live-builder-vagrant/actions/workflows/build.yml)
+
 This is a [Vagrant](https://www.vagrantup.com/) Environment for creating custom [Debian Live](https://www.debian.org/CD/live/) ISO images.
 
 # Usage

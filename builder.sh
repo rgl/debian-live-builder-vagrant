@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 set -euxo pipefail
 
 
@@ -13,11 +13,16 @@ LB_BUILD_TYPE="${LB_BUILD_TYPE:=iso}"
 LB_BUILD_ARCH="${LB_BUILD_ARCH:=amd64}"
 
 # the debian mirror.
-BUILD_DEBIAN_MIRROR="${BUILD_DEBIAN_MIRROR:=http://ftp.pt.debian.org/debian}"
+if [ "$CI" == 'true' ]; then
+    BUILD_DEBIAN_MIRROR="${BUILD_DEBIAN_MIRROR:=http://deb.debian.org/debian}"
+else
+    BUILD_DEBIAN_MIRROR="${BUILD_DEBIAN_MIRROR:=http://ftp.pt.debian.org/debian}"
+fi
 
 
-echo 'Defaults env_keep += "DEBIAN_FRONTEND"' >/etc/sudoers.d/env_keep_apt
-chmod 440 /etc/sudoers.d/env_keep_apt
+#
+# update the apt package cache.
+
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 
@@ -90,7 +95,7 @@ case "$(uname -m)" in
         exit 1
         ;;
 esac
-apt-get install -y libcdio-utils librsvg2-bin pngquant
+apt-get install -y fdisk libcdio-utils librsvg2-bin pngquant
 if [ "$HOST_ARCH" != "$LB_BUILD_ARCH" ]; then
     apt-get install -y qemu-user-static
 fi
