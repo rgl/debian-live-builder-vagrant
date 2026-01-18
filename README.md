@@ -2,7 +2,7 @@ This is a [Vagrant](https://www.vagrantup.com/) Environment for creating custom 
 
 # Usage
 
-Install the [Base Debian Vagrant Box](https://github.com/rgl/debian-vagrant).
+Install the [Base Debian UEFI Vagrant Box](https://github.com/rgl/debian-vagrant).
 
 Launch the debian live builder, this will build the ISO image and copy it to the current directory as `live-image-amd64.hybrid.iso`:
 
