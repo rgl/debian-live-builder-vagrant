@@ -42,7 +42,7 @@ fdisk -u -l /dev/sdd
 lsblk /dev/sdd
 mkdir -p /mnt/sdd1
 mount /dev/sdd1 /mnt/sdd1
-(cd /mnt/sdd1 && md5sum --quiet --check md5sum.txt)
+(cd /mnt/sdd1 && sha256sum --quiet --check sha256sum.txt)
 umount /mnt/sdd1
 eject /dev/sdd
 ```
