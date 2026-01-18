@@ -79,8 +79,18 @@ EOF
 #
 # install dependencies.
 
+case "$(uname -m)" in
+    x86_64) HOST_ARCH="amd64" ;;
+    aarch64) HOST_ARCH="arm64" ;;
+    *) 
+        echo "Error: Unsupported host architecture '$(uname -m)'" >&2
+        exit 1
+        ;;
+esac
 apt-get install -y libcdio-utils librsvg2-bin pngquant
-apt-get install -y qemu-user-static
+if [ "$HOST_ARCH" != "$LB_BUILD_ARCH" ]; then
+    apt-get install -y qemu-user-static
+fi
 
 
 #
@@ -148,9 +158,13 @@ fi
 if [ "$LB_BUILD_ARCH" == 'arm64' ]; then
 lb_config="$lb_config \\
     --bootloader grub-efi \\
-    --bootstrap-qemu-arch arm64 \\
-    --bootstrap-qemu-static /usr/bin/qemu-arm-static \\
     "
+fi
+if [ "$HOST_ARCH" != "$LB_BUILD_ARCH" ]; then
+    lb_config="$lb_config \\
+        --bootstrap-qemu-arch arm64 \\
+        --bootstrap-qemu-static /usr/bin/qemu-arm-static \\
+        "
 fi
 cat >auto/config <<EOF
 #!/bin/sh
