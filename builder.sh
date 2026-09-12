@@ -13,7 +13,7 @@ LB_BUILD_TYPE="${LB_BUILD_TYPE:=iso}"
 LB_BUILD_ARCH="${LB_BUILD_ARCH:=amd64}"
 
 # the debian mirror.
-if [ "$CI" == 'true' ]; then
+if [ "${CI:-false}" == 'true' ]; then
     BUILD_DEBIAN_MIRROR="${BUILD_DEBIAN_MIRROR:=http://deb.debian.org/debian}"
 else
     BUILD_DEBIAN_MIRROR="${BUILD_DEBIAN_MIRROR:=http://ftp.pt.debian.org/debian}"
@@ -470,6 +470,25 @@ cat >config/rootfs/excludes <<'EOF'
 boot/
 vmlinuz*
 initrd.img*
+EOF
+
+# drop the kernel version number from the boot filenames.
+# NB this makes the network boot configuration simpler.
+cat >config/hooks/normal/9991-rename-boot-filenames.hook.binary <<'EOF'
+#!/bin/sh
+set -eux
+if ls live/vmlinuz-* >/dev/null 2>&1; then
+    rm -f live/vmlinuz
+    mv live/vmlinuz-* live/vmlinuz
+fi
+if ls live/initrd.img-* >/dev/null 2>&1; then
+    rm -f live/initrd.img
+    mv live/initrd.img-* live/initrd.img
+fi
+sed -i -E 's,(/live/(vmlinuz|initrd\.img))-[^ ]+,\1,g' boot/grub/grub.cfg
+if [ -f isolinux/live.cfg ]; then
+    sed -i -E 's,(/live/(vmlinuz|initrd\.img))-[^ ]+,\1,g' isolinux/live.cfg
+fi
 EOF
 
 chmod +x config/hooks/normal/*.hook.*

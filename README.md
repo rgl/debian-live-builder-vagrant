@@ -9,7 +9,7 @@ Install the [Base Debian UEFI Vagrant Box](https://github.com/rgl/debian-vagrant
 Launch the debian live builder, this will build the ISO image and copy it to the current directory as `live-image-amd64.hybrid.iso`:
 
 ```bash
-vagrant up builder --no-destroy-on-error
+vagrant up builder --no-destroy-on-error | tee builder.log
 ```
 
 Boot the generated ISO in [BIOS](https://en.wikipedia.org/wiki/BIOS) mode:
